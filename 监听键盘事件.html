@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        body,div{
+            margin: 0;
+            padding: 0;
+        }
+        div{
+            position: absolute;
+            left: 45%;
+            top: 40%;
+            width: 100px;
+            height: 100px;
+            background: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="div1"></div>
+
+
+
+
+    <script type="text/javascript" src="js/tools.js"></script>
+    <script type="text/javascript">
+		var oDiv = document.getElementById("div1");
+		var cw = (document.documentElement.clientWidth || document.body.clientWidth) - 100;
+		var ch = (document.documentElement.clientHeight || document.body.clientHeight) - 100;
+		var time = null;
+		var conTop = oDiv.offsetTop;
+		var conLeft = oDiv.offsetLeft;
+		function animate(num){
+			window.clearTimeout(time);
+			time = null;
+			_move();
+			function _move(){
+				window.clearTimeout(time);
+				//0 2ÉÏÏÂ  1 3×óÓÒ
+				var n = (num == 0 || num == 2)?'top':'left';
+				var oDivStyle = getCss(oDiv,n);
+				if( n == 'top'){
+					if( num == 0){
+						conTop--;
+						if( conTop <= 0){
+							conTop = 0;
+							oDiv.style.top = 0;
+							return;
+						}
+					}else{
+						conTop++;
+						if( conTop >= ch){
+							conTop = ch;
+							oDiv.style.top = ch + 'px';
+						}
+					}
+					oDiv.style.top = conTop + 'px';
+				}else{
+					if( num == 3){
+						conLeft--;
+						if( conLeft <= 0){
+							conLeft = 0;
+							oDiv.style.left = 0;
+							return
+						}
+					}else{
+						conLeft++;
+						if(conLeft >= cw){
+							conLeft = cw;
+							oDiv.style.left = cw + 'px';
+							return
+						}
+					}
+					oDiv.style.left = conLeft + 'px';
+				}
+				time = window.setTimeout(_move,3);
+			}
+		}
+		function getCss(ele,attar){
+			if(window.getComputedStyle){
+				return parseFloat(window.getComputedStyle(ele,null)[attar])
+			}else{
+				return parseFloat(window.currentStyle[attar])
+			}
+		}
+		window.onkeydown = function(e){
+			e = e || window.event;
+			var n = e.keyCode;
+			switch(n){
+				case 38:
+					animate(0);
+					break;
+				case 39:
+					animate(1);
+					break;
+				case 40:
+					animate(2);
+					break;	
+				case 37:
+					animate(3);
+					break;
+			}
+		}
+		window.onkeyup = function(){
+			window.clearTimeout(time);
+			time = null;
+		}
+		
+		
+    </script>
+</body>
+</html>
